@@ -7,7 +7,6 @@ const VideoCard = (props) => {
   const { url, username, description, song, likes, shares, comments, saves, profilePic, setVideoRef, autoplay } = props;
   const videoRef = useRef(null);
 
-  const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
 
 
