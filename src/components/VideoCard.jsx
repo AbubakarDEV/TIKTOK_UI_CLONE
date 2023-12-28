@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import FooterLeft from './FooterLeft';
 import FooterRight from './FooterRight';
 import './VideoCard.css';
@@ -7,9 +7,18 @@ const VideoCard = (props) => {
   const { url, username, description, song, likes, shares, comments, saves, profilePic, setVideoRef, autoplay } = props;
   const videoRef = useRef(null);
 
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+
   useEffect(() => {
     if (autoplay) {
-      videoRef.current.play();
+      // videoRef.current.play();
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
     }
   }, [autoplay]);
 
@@ -21,32 +30,54 @@ const VideoCard = (props) => {
     }
   };
 
+
+  const handleProgressChange = () => {
+    const currentProgress = (videoRef.current.currentTime / videoRef.current.duration) * 100;
+    setProgress(currentProgress);
+  };
+
+  const handleProgressBarClick = (e) => {
+    const clickedTime =
+      (e.nativeEvent.offsetX / e.target.offsetWidth) * videoRef.current.duration;
+    videoRef.current.currentTime = clickedTime;
+  };
+
   return (
     <div className="video">
-      {/* The video element */}
       <video
-        poster='/img2.jpg'
         className="player"
         onClick={onVideoPress}
+        onTimeUpdate={handleProgressChange}
         ref={(ref) => {
           videoRef.current = ref;
           setVideoRef(ref);
         }}
-        controls
+
         loop
         src={url}
         muted="muted"
+        poster="./img2.jpg"
       >
-        {/* <source src="movie.ogg" type="video/ogg"></source> */}
 
       </video>
+      <div
+        onClick={handleProgressBarClick}
+        className='progressBarCnt'
+      >
+        <div
+          style={{
+            width: `${progress}%`,
+            height: '8px',
+            background: 'red',
+          }}
+        />
+      </div>
+
       <div className="bottom-controls">
         <div className="footer-left">
-          {/* The left part of the container */}
           <FooterLeft username={username} description={description} song={song} />
         </div>
         <div className="footer-right">
-          {/* The right part of the container */}
           <FooterRight likes={likes} shares={shares} comments={comments} saves={saves} profilePic={profilePic} />
         </div>
       </div>

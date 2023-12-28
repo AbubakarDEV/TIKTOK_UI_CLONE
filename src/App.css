@@ -9,6 +9,7 @@ html {
   background-color: #000;
   display: grid;
   place-items: center;
+  /* overflow: scroll ; */
 }
 
 .container {
@@ -24,6 +25,7 @@ html {
 .container::-webkit-scrollbar {
   display: none;
 }
+
 
 .container {
   -ms-overflow-style: none;
